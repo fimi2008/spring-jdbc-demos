@@ -8,6 +8,7 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>spring-01-jdbc</module>
+    <module>spring-02-jdbc-transaction</module>
   </modules>
 
   <name>Maven</name>

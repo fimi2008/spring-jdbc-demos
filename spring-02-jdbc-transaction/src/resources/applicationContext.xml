@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+  	<!-- 
+  		引入prperties配置文件
+  	 -->
+  	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath:jdbc.properties</value>
+		</property>
+	</bean>
+
+  	<bean id="dataSource" destroy-method="close"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean class="com.shine.spring.jdbc.transaction.dao.impl.PersonDaoImpl" id="personDao">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+
+	<bean class="com.shine.spring.jdbc.transaction.service.impl.PersonServiceImpl" id="personService">
+		<property name="personDao">
+			<ref bean="personDao"/>
+		</property>
+	</bean>
+
+	<!--事务管理器-->
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+
+	<!--
+		声明事务策略
+			id是标示符
+			transaction-manager 事务管理器
+	-->
+	<tx:advice id="tx" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!--
+				告诉spring容器什么样的目标方法采用什么样的事务策略
+				name 用来说明目标方法
+						save* 以save开头的目标方法
+				isolation 隔离属性
+				propagation 传播属性  是解决事务嵌套问题的
+				read-only 为true:只读事务 为false:读写事务
+			-->
+			<tx:method name="save*" isolation="DEFAULT" propagation="REQUIRED" read-only="false"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="perform" expression="execution(* com.shine.spring.jdbc.transaction.service.impl.*.*(..))"/>
+		<aop:advisor advice-ref="tx" pointcut-ref="perform"/>
+	</aop:config>
+
+</beans>

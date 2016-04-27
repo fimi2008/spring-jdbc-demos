@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="personDao4" class="com.shine.spring.jdbc.dao.PersonDao">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+
+	<bean id="personDao5" class="com.shine.spring.jdbc.dao.PersonDao" parent="jdbcTemplate"></bean>
+	<!--通过setter方法注入-->
+	<bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+
+	<!--通过构造器注入-->
+	<bean class="org.springframework.jdbc.core.JdbcTemplate" id="jdbcTemplate2">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+
+	<bean class="com.shine.spring.jdbc.dao.PersonTempDao" id="personTempDao1">
+		<property name="jdbcTemplate">
+			<ref bean="jdbcTemplate"/>
+		</property>
+	</bean>
+
+	<bean class="com.shine.spring.jdbc.dao.PersonTempDao" id="personTempDao2">
+		<property name="jdbcTemplate">
+			<ref bean="jdbcTemplate2"/>
+		</property>
+	</bean>
+
+	<!--personDaoSupport 继承JdbcDaoSupport -->
+	<bean class="com.shine.spring.jdbc.dao.PersonDaoSupport" id="personDaoSupport">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport" id="simpleJdbcDaoSupport">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+	<bean class="com.shine.spring.jdbc.dao.PersonDaoSupport2" id="personDaoSupport2">
+		<property name="jdbcDaoSupport">
+			<ref bean="simpleJdbcDaoSupport"/>
+		</property>
+	</bean>
+</beans>

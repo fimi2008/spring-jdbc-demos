@@ -51,4 +51,6 @@
 		<constructor-arg ref="dataSource"></constructor-arg>
 	</bean>
 	<!--第三种方式结束-->
+
+	<import resource="applicationContext-jdbc.xml"/>
 </beans>

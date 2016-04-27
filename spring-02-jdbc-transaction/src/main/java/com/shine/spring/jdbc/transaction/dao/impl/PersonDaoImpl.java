@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
  */
 public class PersonDaoImpl extends JdbcDaoSupport implements PersonDao{
 
-    @Override
     public void savePerson(String sql){
         this.getJdbcTemplate().execute(sql);
     }

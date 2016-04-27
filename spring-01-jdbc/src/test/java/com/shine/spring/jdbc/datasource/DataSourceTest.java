@@ -21,6 +21,9 @@ public class DataSourceTest {
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         /**
          * 面向接口编程
+         *
+         * JDBC属于模板模式
+         * 模板模式:固定的代码+可变的参数
          */
         DataSource dataSource = (DataSource) context.getBean("dataSource");
         System.out.println(dataSource);

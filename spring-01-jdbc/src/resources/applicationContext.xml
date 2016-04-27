@@ -21,4 +21,34 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 
+	<!-- 第一种方式开始 -->
+	<bean id="personDao" class="com.shine.dao.PersonDaoImpl">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+	<!-- 第一种方式结束 -->
+
+	<!--第二种方式开始-->
+	<!-- set注入 -->
+	<bean id="dbTemplate" class="com.shine.dbtemplate.DBTemplate">
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+
+	<bean id="personDao2" class="com.shine.dao.PersonDaoImpl" parent="dbTemplate"></bean>
+	<!--第二种方式结束-->
+
+	<!--第三种方式开始-->
+	<!-- 构造方法注入 -->
+	<!--
+		使用这种方式注意点:
+			PersonDaoImpl 必须要重写一个有参构造函数并调用父类的有参构造方法
+			由于上面有使用PersonDaoImpl的无参构造方法,所以也要重写一个无参构造方法
+	-->
+	<bean id="personDao3" class="com.shine.dao.PersonDaoImpl" >
+		<constructor-arg ref="dataSource"></constructor-arg>
+	</bean>
+	<!--第三种方式结束-->
 </beans>

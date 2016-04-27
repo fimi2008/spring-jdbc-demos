@@ -2,6 +2,7 @@ package com.shine.spring.jdbc.transaction.service.impl;
 
 import com.shine.spring.jdbc.transaction.dao.PersonDao;
 import com.shine.spring.jdbc.transaction.service.PersonService;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  * <p>Description: TODO </p>
